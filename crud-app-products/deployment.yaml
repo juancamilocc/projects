@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-crud
+spec:
+  selector:
+    matchLabels:
+      app: app-crud
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: app-crud
+    spec:
+      containers:
+      - name: app-crud
+        image: ghcr.io/juancamilocc/app-crud:v0.1
+        ports:
+        - containerPort: 8000
+      env:
+      - name: MYSQL_HOST
+        value: mysql
+      - name: MYSQL_USER
+        value: root
+      - name: MYSQL_PASSWORD
+        value: mypassword
+      - name: MYSQL_DB
+        value: Products
+
+    
+

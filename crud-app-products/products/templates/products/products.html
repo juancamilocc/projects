@@ -1,0 +1,26 @@
+{% extends 'products/layout.html' %}
+
+{% block body %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="container my-3">List products!!</h1>
+            {% for product in products %}
+            <ul class="list-group">    
+                <li class="list-group-item">
+                    <a href={% url 'products:detail_product' product.id %}>
+                        <h3 class="fw-bold">{{ product.product }}</h3>
+                    </a>
+                </li>
+                <p class="list-group">Code: {{ product.code }}</p>
+                <p class="list-group">Price: {{ product.price }}</p>
+                <p class="list-group mb-1 my-1">Description: {{ product.description }}</p>
+                {% empty%}
+                    <h1 class="text-danger">No products yet!</h1>
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</main>    
+{% endblock  %}

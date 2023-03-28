@@ -1,0 +1,17 @@
+{% extends 'products/layout.html' %}
+
+{% block body %}
+<main class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <h1>Create product!!</h1>
+            {{ error }}
+            <form action="{% url 'products:create_product' %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary">Create</button>
+            <form>
+        </div>
+    </div>
+</main> 
+{% endblock  %}

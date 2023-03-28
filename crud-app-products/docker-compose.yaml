@@ -1,0 +1,35 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    container_name: mysqldb
+    volumes:
+      - crud-mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: Products
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: app-crud
+    ports:
+      - "8000:8000"
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: mypassword
+      DB_NAME: Products
+      DB_PORT: "3306"
+    depends_on:
+      - mysql
+      
+volumes:
+  crud-mysql-data:
+
