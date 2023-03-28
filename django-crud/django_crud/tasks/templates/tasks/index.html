@@ -1,0 +1,33 @@
+{% extends 'tasks/layout.html' %}
+{% load static %}
+
+{% block body %}
+    <h1 class="display-6 fw-bold">Tasks!</h1>
+
+    <form action="{% url 'tasks:create_task' %}" method="POST" class="card card-body bg-secondary">
+        {% csrf_token %}
+
+        <label for="title">Title:</label>
+        <input type="text" placeholder="Ingress your task" name="task" class="form-control mb-2">
+        <label for="description">Description:</label>
+        <textarea rows="3" placeholder="Ingress the description" name="description" class="form-control mb-2"></textarea>
+        <button class="btn btn-success">Save</button>
+    </form>
+
+    {% for task in tasks %}
+        <div class="card card-body text-black mt-2 d-flex flex-row justify-content-between">
+            <div>
+                <h4>{{ task.task }}</h4>
+                <p>{{ task.description }}</p>
+            </div>
+            <form action="{% url 'tasks:delete_task' task.id %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </div>
+    {% empty %}
+        <h1 class="display-5 text-center fw-bold">No tasks yet</h1>
+    {% endfor %}
+        
+{% endblock  %}
+
