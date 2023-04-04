@@ -1,47 +1,45 @@
-from fastapi import APIRouter, Path
-from models import Todo, TodoItem
+from fastapi import APIRouter, Path, HTTPException, status, Request, Depends
+from models import Todo, TodoItem, TodoItems
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter(prefix="/todo", tags=["Todos items"], responses={404: {"Message": "Not found"}})
+templates = Jinja2Templates(directory="templates")
 
 todo_list = []
 
 #C
-@router.post("")
-async def add_todo(todo: Todo) -> dict:
-    try:
-        todo_list.append(todo)
-        return {
-            "Message": "Todo added successfuly"
-        }
-    except IndexError:
-        return {
-            "Message": "Not allowed"
-        }
-    
+@router.post("", status_code = status.HTTP_201_CREATED)
+async def add_todo(request: Request, todo: Todo = Depends(Todo.as_form)) -> dict:
+    todo.id = len(todo_list) + 1
+    todo_list.append(todo)
+    return templates.TemplateResponse("todo.html", {
+        "request": request,
+        "todos": todo_list
+    })
 
 #R
-@router.get("")
-async def get_todo() -> dict:
-    return {
+@router.get("", response_model = TodoItems)
+async def get_todo(request: Request) -> dict:
+    return templates.TemplateResponse("todo.html", {
+        "request": request,
         "todos": todo_list
-    }
+    })
 
 #R
 @router.get("/{todo_id}")
-async def get_id_todo_path(todo_id: int = Path(title="Return item for ID", 
+async def get_id_todo_path(request: Request, todo_id: int = Path(title="Return item for ID", 
     description="Search item for ID")) -> dict:
     
     for todo in todo_list:
         if todo.id == todo_id:
-            return {
+            return templates.TemplateResponse("todo.html", {
+                "request": request,
                 "todo": todo
-            }    
-    return {
-        "Message": "This id no exists"
-    }
+            })    
+    raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST, detail = "This ID not exists")
 
 #U
-@router.put("/{todo_id}")
+@router.put("/{todo_id}", status_code = status.HTTP_205_RESET_CONTENT)
 async def update_todo(todo_data: TodoItem, todo_id: int = Path(title="Update item", 
     description="Update item for ID")) -> dict:
     
@@ -51,9 +49,7 @@ async def update_todo(todo_data: TodoItem, todo_id: int = Path(title="Update ite
             return {
                 "Message": "Todo item update successfuly"
             }    
-    return {
-        "Message": "ID no exists, imposible update"
-    }
+    raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST, detail = "This item not exists")
 
 #D
 @router.delete("/{todo_id}")
@@ -67,9 +63,7 @@ async def delete_item(todo_id: int = Path(title="Delete an item",
             return {
                 "Message": "The item with ID:"+str(todo.id)+" ,deleted successfuly"
             }
-    return {
-        "Message": "The ID no exitsts, imposible delete item"
-    }
+    raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "This item not exists")
 
 #D
 @router.delete("")
