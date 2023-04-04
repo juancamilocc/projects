@@ -1,20 +1,15 @@
 from pydantic import BaseModel
 
-class Item(BaseModel):
-    item: str
-    status: str
-
 class Todo(BaseModel):
     id: int
-    item: Item
+    item: str
 
     class Config:
         schema_extra = {
             "example": {
                 "id": 1,
                 "item": {
-                    "item": "Example item",
-                    "status": "Active o Inactive"
+                    "item": "Example item"
             }
             }
         } 
@@ -25,6 +20,6 @@ class TodoItem(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "item": "REad next chapter book"
+                "item": "Read next chapter book"
             }
         }
