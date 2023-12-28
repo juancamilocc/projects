@@ -1,3 +1,3 @@
 # Projects
 
-This repositorie contain my personal projects, using Python and Java, with frameworks like FastAPI, Django and Springboot.
+This repositorie contains my personal projects, using Python and Go, with frameworks like FastAPI and Django.
