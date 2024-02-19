@@ -88,11 +88,6 @@ func renderTemplates(w http.ResponseWriter, tmpl string, p *Page) {
 }
 
 func main() {
-	// p1 := &Page{Title: "TestPage", Body: []byte("This an example page")}
-	// p1.Save()
-
-	// p2, _ := LoadPage("TestPage")
-	// fmt.Println(string(p2.Body))
 
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
