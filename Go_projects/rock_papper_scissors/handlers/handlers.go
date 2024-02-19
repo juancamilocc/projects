@@ -87,7 +87,6 @@ const baseDir = "templates/"
 
 func renderTemplate(w http.ResponseWriter, name string, data any) {
 	templates := template.Must(template.ParseFiles(baseDir+"base.html", baseDir+name))
-	// Header
 	w.Header().Set("Content-Type", "text/html")
 
 	err := templates.ExecuteTemplate(w, "base", data)
