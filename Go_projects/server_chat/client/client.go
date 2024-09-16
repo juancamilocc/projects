@@ -33,7 +33,7 @@ func main() {
 	<-done                      // wait until the program has been finished
 }
 
-func CopyContent(dst io.Writer, src io.Reader) { // This function could has been voided, in my oppinion but well, is the example in platzi
+func CopyContent(dst io.Writer, src io.Reader) {
 
 	_, err := io.Copy(dst, src)
 	if err != nil {
